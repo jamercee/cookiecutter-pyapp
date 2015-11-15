@@ -61,6 +61,8 @@ help:
 	@echo "comp - perform static analysis (default target)"
 	@echo "tests - run unittests"
 	@echo "docs - generate documentation"
+	@echo "dist - build package"
+	@echo "install - install package to site-packages"
 	@echo "clean - remove all built components"
 	@echo "clean-build - remove all built outputs"
 	@echo "clean-pyc - remove Python file artifacts"
@@ -70,6 +72,16 @@ comp: $(TGTS)
 
 tests: comp
 	$(NOSETESTS)
+
+docs:
+	$(MAKE) -C docs html
+	$(BROWSER) docs/_build/html/index.html
+
+dist: test docs
+	@$(PYTHON) setup.py sdist
+
+install: test docs
+	@$(PYTHON) setup.py install
 
 clean: clean-build clean-pyc clean-docs
 
@@ -87,10 +99,6 @@ clean-pyc:
 clean-docs:
 	$(MAKE) -c docs clean
 	
-docs:
-	$(MAKE) -C docs html
-	$(BROWSER) docs/_build/html/index.html
-
 debug:
 	@echo OSTYPE:: $(OSTYPE)
 	@echo PYTHON:: $(PYTHON)
