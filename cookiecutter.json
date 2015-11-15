@@ -1,11 +1,11 @@
 {
-    "author": "Jim Carroll",
-    "email": "jim@carroll.net",
     "project_name": "New project",
     "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_') }}",
     "project_short_description": "short project description",
     "version": "1.0",
     "release": "1.0.1",
+    "author": "Jim Carroll",
+    "email": "jim@carroll.net",
     "year" : "2015",
     "copyright": "Copyright(c) {{ cookiecutter.year }}, Carroll-Net, Inc., All Rights Reserved"
 }
