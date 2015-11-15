@@ -40,18 +40,9 @@ BROWSER := python -c "$$BROWSER_PYSCRIPT"
 	@$(PYTHON) -c 'import py_compile; py_compile.compile("$<")'
 
 # ----------------------------------------------------------------------------
-# Rule to compile cython *.pyx -> *.pln
-# ----------------------------------------------------------------------------
-%.pln: %.pyx
-	@echo Check $<
-	@$(PYLINT) -rn --rcfile pylint.rc $<
-	@touch $@
 
-# ----------------------------------------------------------------------------
-
-SOURCE := $(wildcard src/*.py src/*.pyx) $(wildcard tests/*.py)
-TGTS := $(patsubst %.py, %.pyc,$(SOURCE))
-TGTS := $(patsubst %.pyx,%.pyl,$(TGTS))
+SRCS := $(wildcard src/{{cookiecutter.project_slug}}/*.py) $(wildcard tests/*.py)
+TGTS := $(patsubst %.py, %.pyc,$(SRCS))
 
 .PHONY: clean clean-build clean-docs clean-pyc comp debug docs help 
 
@@ -60,9 +51,10 @@ all: comp
 help:
 	@echo "comp - perform static analysis (default target)"
 	@echo "tests - run unittests"
-	@echo "docs - generate documentation"
+	@echo "docs - generate html documentation"
 	@echo "dist - build package"
 	@echo "install - install package to site-packages"
+	@echo "viewdocs - generate & view html documentation"
 	@echo "clean - remove all built components"
 	@echo "clean-build - remove all built outputs"
 	@echo "clean-pyc - remove Python file artifacts"
@@ -75,12 +67,14 @@ tests: comp
 
 docs:
 	$(MAKE) -C docs html
+
+viewdocs: docs
 	$(BROWSER) docs/_build/html/index.html
 
-dist: test docs
+dist: tests docs
 	@$(PYTHON) setup.py sdist
 
-install: test docs
+install: tests docs
 	@$(PYTHON) setup.py install
 
 clean: clean-build clean-pyc clean-docs
@@ -97,7 +91,7 @@ clean-pyc:
 	find . -name '__pycache__' -exec -fr {} +
 
 clean-docs:
-	$(MAKE) -c docs clean
+	$(MAKE) -C docs clean
 	
 debug:
 	@echo OSTYPE:: $(OSTYPE)
@@ -105,7 +99,6 @@ debug:
 	@echo PYLINT:: $(PYLINT)
 	@echo FLAKE:: $(FLAKE)
 	@echo Source files found::
-	@echo $(SOURCE)
+	@echo $(SRCS)
 	@echo Targets to build::
 	@echo $(TGTS)
-
