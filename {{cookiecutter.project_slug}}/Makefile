@@ -63,10 +63,10 @@ help:
 comp: $(TGTS)
 
 tests: comp
-	$(NOSETESTS)
+	@$(NOSETESTS)
 
 docs:
-	$(MAKE) -C docs html
+	@$(MAKE) -C docs html
 
 viewdocs: docs
 	$(BROWSER) docs/_build/html/index.html
@@ -80,9 +80,7 @@ install: tests docs
 clean: clean-build clean-pyc clean-docs
 
 clean-build:
-	rm -fr build/
-	rm -fr dist/
-	rm -fr .eggs/
+	-rm -fr build/ dist/ .eggs/
 	find . -name '*.egg-info' -exec rm -fr {} +
 	find . -name '*.egg' -exec rm -fr {} +
 
