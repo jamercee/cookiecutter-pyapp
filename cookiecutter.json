@@ -1,4 +1,5 @@
 {
+    "project_type": "app",
     "project_name": "New Project",
     "project_slug": "{{ cookiecutter.project_name.replace(' ', '_') }}",
     "project_short_description": "short project description",
