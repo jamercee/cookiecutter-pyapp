@@ -1,8 +1,8 @@
 {
     "project_type": "app",
-    "project_name": "New Project",
+    "project_name": "New Application",
     "project_slug": "{{ cookiecutter.project_name.replace(' ', '_') }}",
-    "project_short_description": "short project description",
+    "project_short_description": "short application description",
     "version": "1.0",
     "release": "1.0.1",
     "author": "Jim Carroll",
