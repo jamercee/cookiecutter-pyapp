@@ -31,7 +31,7 @@ setup(
     # Project meta-data
 
     name = '{{cookiecutter.project_slug}}',
-    version = {{cookiecutter.release}},
+    version = '{{cookiecutter.release}}',
     packages = ['{{cookiecutter.project_slug}}'],
     package_dir = {'': 'src'},
     entry_points = {'console_scripts': ['{{cookiecutter.project_slug}} = {{cookiecutter.project_slug}}:main',],},
