@@ -6,13 +6,11 @@ ifeq ($(OS), Windows_NT)
 	PYTHON := C:/Python27/python.exe
 	PYLINT := C:/Python27/Scripts/pylint.exe
 	FLAKE := C:/Python27/Scripts/flake8.exe
-	NOSETESTS := C:/Python27/Scripts/nosetests.exe
 else
 	OSTYPE := $(shell uname)
 	PYTHON := python2.7
 	PYLINT := pylint
 	FLAKE := flake8
-	NOSETESTS := nosetests
 endif
 
 # ----------------------------------------------------------------------------
@@ -63,7 +61,7 @@ help:
 comp: $(TGTS)
 
 tests: comp
-	@$(NOSETESTS)
+	@$(PYTHON) setup.py test
 
 docs:
 	@$(MAKE) -C docs html
@@ -85,7 +83,7 @@ clean-build:
 	find . -name '*.egg' -exec rm -fr {} +
 
 clean-pyc:
-	find . -name '*.py[co]' -o -name '*.pln' -o -name '~*' -exec -f {} +
+	find . -name '*.py[co]' -o -name '*.pln' -o -name '~*' -exec rm -f {} +
 	find . -name '__pycache__' -exec -fr {} +
 
 clean-docs:
