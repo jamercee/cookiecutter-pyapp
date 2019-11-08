@@ -11,13 +11,11 @@ dist
 build
 eggs
 parts
-bin
-var
 sdist
 develop-eggs
 .installed.cfg
-lib
-lib64
+*.lib
+*.lib64
 
 # Installer logs
 pip-log.txt
@@ -26,7 +24,6 @@ pip-log.txt
 .coverage
 .tox
 nosetests.xml
-htmlcov
 
 # Translations
 *.mo

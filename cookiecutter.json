@@ -7,6 +7,6 @@
     "release": "1.0.1",
     "author": "Jim Carroll",
     "email": "jim@carroll.net",
-    "year" : "2015",
+    "year" : "2019",
     "copyright": "Copyright(c) {{ cookiecutter.year }}, Carroll-Net, Inc., All Rights Reserved"
 }

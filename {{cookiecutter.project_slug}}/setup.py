@@ -37,8 +37,8 @@ setup(
 
     # Testing (assumes you have nose installed)
 
-    test_suite      = 'nose.collector',
-    setup_requires  = ['nose>=1.0'],
+    test_suite = 'nose.collector',
+    setup_requires = ['nose>=1.0'],
 
     # Project details
 
