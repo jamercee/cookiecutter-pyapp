@@ -3,15 +3,17 @@
 # ----------------------------------------------------------------------------
 ifeq ($(OS), Windows_NT)
 	OSTYPE := Windows
-	PYTHON := C:/Python27/python.exe
-	PYLINT := C:/Python27/Scripts/pylint.exe
-	FLAKE := C:/Python27/Scripts/flake8.exe
+	PYTHON := python.exe
+	PYLINT := pylint.exe
+	FLAKE := flake8.exe
 else
 	OSTYPE := $(shell uname)
-	PYTHON := python2.7
+	PYTHON := python
 	PYLINT := pylint
 	FLAKE := flake8
 endif
+
+PYARCH := $(shell $(PYTHON) -c "import platform; print(platform.architecture()[0])")
 
 # ----------------------------------------------------------------------------
 # Define $(BROWSER) for reading documentation with web browser
@@ -29,20 +31,27 @@ export BROWSER_PYSCRIPT
 BROWSER := python -c "$$BROWSER_PYSCRIPT"
 
 # ----------------------------------------------------------------------------
-# Rule to compile python *.py -> *.pyc
+# Rule to compile python *.py -> *.pylint
 # ----------------------------------------------------------------------------
-%.pyc:	%.py
+%.pylint:	%.py
 	@echo Check $<
 	@$(PYLINT) -rn -sn --rcfile pylint.rc $<
 	@$(FLAKE) $<
-	@$(PYTHON) -c 'import py_compile; py_compile.compile("$<")'
+	@touch $@
+
+%.pln: %.pyx
+	@echo Check $<
+	@$(PYLINT) -rn --rcfile pylint.rc $<
+	@touch $@
 
 # ----------------------------------------------------------------------------
 
 SRCS := $(wildcard src/*.py) $(wildcard tests/*.py)
-TGTS := $(patsubst %.py, %.pyc,$(SRCS))
+TGTS := $(patsubst %.py, %.pylint,$(SRCS))
 
 .PHONY: clean clean-build clean-docs clean-pyc comp debug docs help 
+
+TESTX := tests.test_targetx
 
 all: comp
 
@@ -61,8 +70,24 @@ help:
 
 comp: $(TGTS)
 
-tests: comp
+# Run all tests with nose, exclude 'slow' and 'bigdisk' test-cases
+ntests: comp
+	@$(PYTHON) setup.py nosetests -A "not slow and not bigdisk"
+
+# Run all tests using python's unittest module
+ptests: comp
 	@$(PYTHON) setup.py test
+
+testx: comp ntestx ptestx
+
+# Run specified test-case with nose
+ntestx: comp
+	@$(PYTHON) setup.py nosetests --verbosity=3 \
+		--tests $(TESTX)
+
+# Run specified test-case with pythons unittest module
+ptestx: comp
+	@$(PYTHON) setup.py test -s $(TESTX)
 
 docs:
 	@$(MAKE) -C docs html
@@ -84,8 +109,11 @@ clean-build:
 	find . -name '*.egg' -exec rm -fr {} +
 
 clean-pyc:
-	find . -name '*.py[co]' -o -name '*.pln' -o -name '~*' -exec rm -f {} +
-	find . -name '__pycache__' -exec -fr {} +
+	find . -name '*.py[cod]' -exec rm -f {} +
+	find . -name '*.pylint' -exec rm -f {} +
+	find . -name '*.pln' -exec rm -f {} +
+	find . -name '~*' -exec rm -f {} +
+	find . -name '__pycache__' -exec rm -fr {} +
 
 clean-docs:
 	$(MAKE) -C docs clean
