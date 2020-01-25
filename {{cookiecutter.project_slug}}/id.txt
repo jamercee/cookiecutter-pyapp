@@ -1,11 +1,13 @@
 # -----------------------------------------------------------------------------
 # This file contains a copy of the cookiecutter settings in effect
 # when the project was created.  You can easily reload these settings
-# into python thusly:
+# into python thusly::
 #
-# import ast
+# from collections import OrderedDict
 # def reading():
-#     return ast.literal_eval(open('id.txt').read())
+#     r'returns a :py:`OrderedDict`'
+#     with open('id.txt') as f:
+#         return eval(f.read())
 #
 # -----------------------------------------------------------------------------
 {{ cookiecutter|pprint }}
